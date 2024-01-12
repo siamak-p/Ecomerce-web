@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+{% block headimporting %}
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock headimporting %}
+
+{% block content %}
+
+
+<style type="text/css">
+
+        * {
+            box-sizing: border-box !important;
+        }
+
+        .input{
+            width: 100%;
+            border-radius: 5px;
+            background: none;
+            margin-top: 20px;
+            padding: 10px;
+            outline: none;
+
+        }
+
+        .summary{
+            display: flex;
+            justify-content: space-between;
+        }
+        .spn{
+            display: block;
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .row .right .box-element .alignment {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+
+        }
+
+        .row .right .box-element .alignment input{
+            width: 100%;
+        }
+
+        .row .right .box-element p{
+            margin-top: 30px;
+            padding-top: 10px;
+            text-align: right;
+             border-top: 1px solid #888888;
+
+        }
+
+        footer{
+            text-align: right;
+            overflow-x: hidden;
+        }
+
+
+        .form-check-labels{
+            /*position: absolute;*/
+            right: 3%;
+        }
+
+        .form-check-inputs{
+            padding-right: 0 !important;
+            margin-right: 0 !important;
+            width: auto;
+        }
+
+        .form-checks{
+            text-align: right;
+        }
+
+    /*.float-right .btn{*/
+        /*text-align: center;*/
+        /*padding: 10%;*/
+        /*margin: 4%;*/
+    /*}*/
+
+</style>
+
+
+<body onload="clearForms()" onunload="clearForms()">
+    <form id="form" action="" method="POST">{% csrf_token %}
+        <div class="container px-3 my-5 clearfix">
+            <!-- Shopping cart table -->
+            {% if order and not order.complete %}
+                <div class="card">
+                    <div class="card-header text-right">
+                        <h2>تائید نهایی و پرداخت</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+
+                            <div class="row">
+                                <div class="right col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="box-element" id="form-wraper">
+                                        <p><strong>مشخصات کاربری</strong></p>
+                                        <div class="alignment" id="user-info">
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                <input type="text"  name="username" class="form-field input" value="{{user.username}}">
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                <input type="email"  name="email" class="form-field input" value="{{user.email}}">
+                                            </div>
+                                        </div>
+
+                                        <p><strong>آدرس پستی</strong></p>
+
+                                        {% if not addresses %}
+                                            <div class="alignment" id="shipping-info">
+                                                <div class="col-lg-12">
+                                                    <!--<input type="text" name="address" class="form-field" required placeholder="آدرس*">-->
+                                                    {{shipping_form.address}}
+                                                    {% if shipping_form.address.errors %}{{shipping_form.address.errors}}{% endif %}
+                                                    <!--{% for i in shipping_form %}{{i.address}}{% endfor %}-->
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <!--<input type="text" name="province" class="form-field" required placeholder="استان*">-->
+                                                    {{shipping_form.province}}
+                                                    {% if shipping_form.province.errors %}{{shipping_form.province.errors}}{% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <!--<input type="text" name="city" class="form-field" required placeholder="شهر*">-->
+                                                    {{shipping_form.city}}
+                                                    {% if shipping_form.city.errors %}{{shipping_form.city.errors}}{% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <!--<input type="text" name="zipcode" class="form-field" required placeholder="کد پستی">-->
+                                                    {{shipping_form.zipcode}}
+                                                    {% if shipping_form.zipcode.errors %}{{shipping_form.zipcode.errors}}{% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <!--<input type="text" name="phone-number" class="form-field" required placeholder="شماره تماس*">-->
+                                                    {{shipping_form.phone}}
+                                                    {% if shipping_form.phone.errors %}{{shipping_form.phone.errors}}{% endif %}
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <!--<input type="text" name="phone-number" class="form-field" required placeholder="شماره تماس*">-->
+                                                    {{shipping_form.selected}}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            {% for address in addresses %}
+                                                <div class="form-checks" >
+                                                    <!--{% if not shipping_form.selected %}-->
+                                                        <input class="form-check-inputs radio-address input" type="radio" name="flexRadioshipping" id="{{address.id}}" {%if address.selected %} checked {% endif %}/>
+                                                        <label class="form-check-labels" for="{{address.id}}">
+                                                            {{address.address}}-
+                                                            {{address.province}}-
+                                                            {{address.city}}
+                                                        </label>
+                                                        <a href="" style="padding-right: 5%"><i class="fa-solid fa-xmark"></i></a>
+                                                    <!--{% endif %}-->
+                                                </div>
+
+                                            {% endfor %}
+                                                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                    {% include 'popupform.html' %}
+                                                </div>
+                                        {% endif %}
+                                        <p><strong>زمان ارسال</strong></p>
+                                        {% include 'calendar.html' %}
+                                        <p><strong> نحوه پرداخت</strong></p>
+                                        <!--<div class="radio-btn">-->
+                                        <div class="form-checks">
+                                            <input class="form-check-inputs payment-method input" type="radio" name="flexRadiopay" id="online-method" />
+                                            <label class="form-check-labels" for="online-method"> آنلاین </label>
+                                            <br>
+                                            <input class="form-check-inputs payment-method input" type="radio" name="flexRadiopay" id="offline-method"/>
+                                            <label class="form-check-labels" for=offline-method> در محل </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- / Shopping cart table -->
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                            <div class="mt-4">
+                                <label class="text-muted font-weight-normal">وزن محصولات انتخاب شده به کیلوگرم: </label>
+                                <div class="text-large text-right"><strong>{{order.total_ordered}}</strong></div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="text-right mt-4">
+                                    <label class="text-muted font-weight-normal m-0">قیمت کل</label>
+                                    <div class="text-large"><strong>{{order.total_price}}</strong></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="float-right row">
+                            <!--<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">-->
+                                <a href="{% url 'meat:home' %}" class="btn btn-outline-dark">برگشت به فروشگاه</a>
+                            <!--</div>-->
+                            <!--<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">-->
+                                <a href="{% url 'cart:cart' %}" class="btn btn-outline-dark">برگشت به سبد خرید</a>
+                            <!--</div>-->
+                            <!--<a href="" class="btn btn-success">پرداخت</a>-->
+                            {% csrf_token %}
+                            <!--<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">-->
+                            {% if delivery_time.time1 and delivery_time.time2 and delivery_time.time3 and delivery_time.time4 %}
+                                <!--<button id="inpbtn" name="payout" class="btn btn-success pay-btn">پرداخت</button>-->
+                                <!--<input id="inpbtn" type="button" name="payout" class="btn btn-success pay-btn" value="پرداخت">-->
+                                <input id="inpbtn" type="submit" name="payout" class="btn btn-success pay-btn" value="پرداخت">
+
+                            {% endif %}
+
+                            <!--</div>-->
+                        </div>
+
+                    </div>
+                </div>
+            {% else %}
+            <p class="text-center align-middle p-4"><strong style="font-size: 2em">محصولی برای خرید انتخاب نشده است.</strong></p>
+            <div style="display: flex; justify-content: center">
+                <a href="{% url 'meat:home' %}" class="btn btn-outline-dark"><strong>برگشت به فروشگاه</strong></a>
+            </div>
+            {% endif %}
+        </div>
+    </form>
+
+</body>
+
+{% endblock content %}
+
+{% block importscript %}
+
+<script>
+    function clearForms()
+    {
+      var i;
+      for (i = 0; (i < document.forms.length); i++) {
+        document.forms[i].reset();
+      }
+    }
+
+    $(document).ready(function (ee) {
+//        ee.preventDefault();
+        var radioaddress = document.getElementsByClassName('radio-address');
+        var timing = document.getElementsByClassName('timing');
+        var methods = document.getElementsByClassName('payment-method');
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        var lastAddress, lastTiming, lastMethod;
+        var $radio = $('input[name=flexRadioshipping]:checked');
+
+
+         //                    address
+            for(var j = 0; j < radioaddress.length; j++){
+                var btnaddress = radioaddress[j];
+                btnaddress.addEventListener("click", function (btnaddressevent) {
+                    var $radio = $('input[name=flexRadioshipping]:checked');
+                    var updated = $radio.val();
+                    var idaddress = $radio.attr('id');
+//                    console.log('update: ', updated, 'radio attr: ', idaddress);
+                    lastAddress = idaddress;
+
+                });
+            }
+
+            //                timing
+            for (var k = 0; k < timing.length; k++){
+                var btntiming = timing[k];
+                btntiming.addEventListener('click', function (btntimingevent) {
+                    var $radio = $('input[name=flexRadiotime]:checked');
+                    var updated = $radio.val();
+                    var idtiming = $radio.attr('id');
+                    lastTiming = idtiming;
+//                    console.log('update: ', updated, 'radio attr: ', idtiming);
+
+                });
+            }
+
+        //                    payment method
+            for (var l = 0; l < methods.length; l++){
+                var btnpaymentmethod = methods[l];
+                btnpaymentmethod.addEventListener('click', function (btnpaymentmethodevent) {
+                    var $radio = $('input[name=flexRadiopay]:checked');
+                    var updated = $radio.val();
+                    var idpaymentmethod = $radio.attr('id');
+                    lastMethod = idpaymentmethod;
+//                    console.log('update: ', updated, 'radio attr: ', idpaymentmethod);
+                    });
+            }
+
+//            agar lastAddress vojood nadashte bashad(yani addressi az rooye form entekhab nashavad) lastaddress ra dar soorate vojoode id $radio, meghdar dehi mikonad
+            if (!lastAddress){
+                if ($radio.attr('id')){
+                    lastAddress = $radio.attr('id')
+                }
+            }
+
+            $("#inpbtn").click(function (event) {
+                if (lastAddress){
+                    event.preventDefault();
+                }
+
+                var formValidity = $('#form')[0].checkValidity();
+                console.log('validity: ', formValidity);
+                if(!lastAddress){
+//                    console.log('lastaddress: ', lastAddress);
+                    var impAddress = document.getElementById('address').value;
+                    var impProvince = document.getElementById('province').value;
+                    var impCity = document.getElementById('city').value;
+
+                    console.log(lastAddress, lastTiming, lastMethod, formValidity, impAddress, impProvince, impCity);
+
+                    $.ajax({
+                        method: "POST",
+                        url:(`${window.location.protocol}//${window.location.host}`+'/cart/checkout/'),
+                        data:{
+                            'address-id': lastAddress,
+                            'timing': lastTiming,
+                            'paymentmethod': lastMethod,
+                            'form-validity': formValidity,
+                            'impaddress': impAddress,
+                            'impprovince': impProvince,
+                            'impcity': impCity,
+
+                            csrfmiddlewaretoken: token
+                        },
+        //                cache: false,
+                        dataType: 'json'//,
+//                         success: function(addressres){
+//                             alertify.set('notifier','position', 'top-left');
+//                             alertify.success(addressres.status);
+//                         }
+
+                    }).done(function (data) {
+                        if (data.success){
+                            window.location.href = data.url;
+                        }
+                    });
+
+                }else if (lastAddress && lastTiming && lastMethod){
+//                    console.log('else');
+                    $.ajax({
+                        method: "POST",
+                        url:(`${window.location.protocol}//${window.location.host}`+'/cart/checkout/'),
+                        data:{
+                            'address-id': lastAddress,
+                            'timing': lastTiming,
+                            'paymentmethod': lastMethod,
+                            'form-validity': formValidity,
+                            csrfmiddlewaretoken: token
+                        },
+        //                cache: false,
+                        dataType: 'json',
+
+                         success: function(addressres){
+                             alertify.set('notifier','position', 'top-left');
+                             alertify.success(addressres.status);
+                         }
+
+                    }).done(function (data) {
+                        if (data.success){
+                            window.location.href = data.url;
+                        }
+                    });
+//                    $.ajax.clear();
+
+                }
+
+//                if(!lastAddress){
+//
+//                    $("#form").submit(function(e) {
+//                        e.preventDefault(); // avoid to execute the actual submit of the form.
+//
+//                        var form = $(this);
+//            //                var actionUrl = form.attr('action');
+//
+//                        $.ajax({
+//                            type: "POST",
+//                            url:(`${window.location.protocol}//${window.location.host}`+'/cart/checkout/'),
+//                            data: form.serialize(),
+//                            cash: false
+//
+//                        });
+//                        $.ajax.clear();
+//                    });
+//
+//
+//                }
+//                else {
+//                    if (!lastTiming){
+//                        alertify.alert('لطقا زمان ارسال را انتخاب فرمایید.')
+//                    }else if(!lastMethod){
+//                        alertify.alert('لطفا روش پرداخت را انتخاب فرمایید.')
+//                    }
+//                }
+
+            });
+
+
+        if(!lastAddress){
+
+            $("#form").submit(function(e) {
+                e.preventDefault(); // avoid to execute the actual submit of the form.
+
+                var form = $(this);
+    //                var actionUrl = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url:(`${window.location.protocol}//${window.location.host}`+'/cart/checkout/'),
+                    data: form.serialize(),
+                    cash: false,
+
+                    success: function(addressres){
+                             alertify.set('notifier','position', 'top-left');
+                             alertify.success(addressres.status);
+                         }
+
+                });
+                $.ajax.clear();
+            });
+        }
+
+    });
+
+</script>
+{% endblock importscript %}

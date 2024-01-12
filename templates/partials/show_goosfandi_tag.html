@@ -1,0 +1,56 @@
+<section class=dragable-list>
+    <div class="title">
+        <span> گوشت گوسفندی </span>
+    </div>
+
+    <div id="owl-product-gog" class="owl-carousel owl-theme">
+    {% for gog in goosfandi %}
+        <div class="item">
+            <div class="shopping-card">
+                <div class="img-sec">
+                    <img src="{{gog.image.url}}">
+                    <!--<span class="hot-offer">پیشنهاد ویژه</span>-->
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+
+                    </div>
+                </div>
+                <div class="title">{{gog.name}}</div>
+                <div class="buttons">
+                    <div class="right">
+                        <span class="price">{{gog.price}}</span>
+                    </div>
+                    <div class="left">
+                        <div class="extend-btn">
+                            <a class="b-text" href="{% url 'meat:detail-view' gog.slug %}"> خرید </a>
+                            <!--<a class="b-icon" href=""> <i class="fas fa-heart"></i> </a>-->
+                        </div>
+                        <!--<div class="extend-btn product_data">-->
+                            <!--{% csrf_token %}-->
+                            <!--<input type="hidden" class="product-id" value="{{gog.id}}">-->
+                            <!--&lt;!&ndash;<input type="hidden" class="product-title" value="{{gog.name}}">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<a class="b-text add-to-cart" data-product={{gog.id}} data-action="add" href=""> خرید </a>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<a class="b-text add-to-cart" href=""> خرید </a>&ndash;&gt;-->
+                            <!--<button data-product="{{gog.id}}" data-action="add" class="b-text add-to-cart">add</button>-->
+                            <!--<a class="b-icon" href=""> <i class="fas fa-shopping-cart"></i> </a>-->
+                        <!--</div>-->
+
+                        <!--<input class="input-number-shape qty-input" type="text" placeholder="تعداد">-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</section>
+<style>
+    .input-number-shape{
+        width: 40%;
+        font-size: 1.2em;
+    }
+
+</style>

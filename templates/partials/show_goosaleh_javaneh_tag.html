@@ -1,0 +1,45 @@
+<section class=dragable-list>
+    <div class="title">
+        <span> گوشت گوساله جوانه </span>
+    </div>
+
+    <div id="owl-product-gj" class="owl-carousel owl-theme">
+    {% for gj in goosaleh_javaneh %}
+        <div class="item">
+            <div class="shopping-card">
+                <div class="img-sec">
+                    <img src="{{gj.image.url}}">
+                    <!--<span class="hot-offer">پیشنهاد ویژه</span>-->
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+
+                    </div>
+                </div>
+                <div class="title">{{gj.name}}</div>
+                <div class="buttons">
+                    <div class="right">
+                        <span class="price">{{gj.price}}</span>
+                    </div>
+
+                    <div class="left">
+                        <div class="extend-btn">
+                            <a class="b-text" href="{% url 'meat:detail-view' gj.slug %}"> خرید </a>
+                            <!--<a class="b-icon" href=""> <i class="fas fa-heart"></i> </a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</section>
+
+<style>
+    .input-number-shape{
+        width: 40%;
+        font-size: 1.2em;
+    }
+</style>

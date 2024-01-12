@@ -1,0 +1,189 @@
+<head>
+<style>
+    .openBtns {
+        display: flex;
+        justify-content: left;
+    }
+
+    .addressPopups {
+        position: relative;
+        text-align: right;
+        width: 100%;
+    }
+
+    .formPopups {
+        display: none;
+        position: fixed;
+        left: 45%;
+        top: 5%;
+        transform: translate(-50%, 5%);
+        border: 3px solid #999999;
+        z-index: 9;
+        background-color: #FFFFFF;
+        padding: 2%;
+        width: 30%;
+        font-size: 1.2em;
+    }
+
+    .formContainers {
+        max-width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        align-content: flex-start;
+    }
+
+    .formContainers input[type=text] {
+        width: 100% ;
+        padding: 15px;
+        margin: 5px 0 20px 0;
+        border: none;
+        background: #eee;
+    }
+
+    .formContainers input[type=text]:focus{
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .btn-align{
+        margin: 15px;
+        text-align: center;
+    }
+
+</style>
+</head>
+<body onload="clearForms()" onunload="clearForms()" id="popupbody">
+    <div class="openBtns">
+        <input class="btn ntn-link btn-add" name="adding" onclick="openForm()" value="افزودن آدرس جدید">
+    </div>
+    <div class="addressPopups">
+        <div class="formPopups" id="popupForm">
+            <h3 style="margin: 15px 0">افزودن آدرس جدید</h3>
+            <hr>
+            <div id="inserting">
+                <!--{{shipping_form.address}}-->
+                <!--{{shipping_form.province}}-->
+                <!--{{shipping_form.city}}-->
+                <!--{{shipping_form.zipcode}}-->
+                <!--{{shipping_form.phone}}-->
+            </div>
+            <div class="btn-align">
+                <!--<button id="btn-add" type="submit" class="btn btn-success add-address" style="padding: 10px 20px" onclick="formSubmit()">افزودن</button>-->
+                <button id="btn-add" data-action="add" class="btn btn-success add-address" style="padding: 10px 20px">افزودن</button>
+                <!--<input type="button" class="btn btn-success add-address" style="padding: 10px 20px" onclick="formSubmit()" value="افزودن">-->
+                <button type="button" class="btn btn-danger cancels" onclick="closeForm()" style="padding: 10px 20px">بستن</button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function openForm() {
+      document.getElementById("popupForm").style.display = "block";
+    }
+    function closeForm() {
+      document.getElementById("popupForm").style.display = "none";
+    }
+
+//        control baraye inke agar ezafe kardane address click nashode bashad va ya click shode va baste shode field haye form bardashte shavad(hazf shavad)
+    $(document).ready(function () {
+        var btnAdd = document.getElementsByClassName('btn-add');
+        for(var i=0; i<btnAdd.length; i++){
+            var button = btnAdd[i];
+            button.addEventListener('click', function (event) {
+//                    event.preventDefault();
+                var bodyForm = document.getElementById('inserting');
+                var wholeForm = document.getElementsByClassName('addressPopups');
+                var ok = document.getElementsByClassName('add-address');
+                var cancel = document.getElementsByClassName('cancels');
+                if(event.target.onclick){
+                    bodyForm.innerHTML = `{{shipping_form.address}}
+                {{shipping_form.province}}
+                {{shipping_form.city}}
+                {{shipping_form.zipcode}}
+                {{shipping_form.phone}}`
+                }
+
+//                    bad az click rooye bastan, fieldhaye form pak mishavand ke error nadashte bashand
+                for(j=0; j<cancel.length; j++){
+                    cbutton = cancel[j];
+                    cbutton.addEventListener('click', function (cancelevent) {
+                        if(cancelevent.target.onclick){
+                            bodyForm.innerHTML="";
+                        }
+                    })
+                }
+
+//                    bad az click rooye button ezafe, field haye form pak mishavand ta error nadashte bashad
+                for(k=0; k<ok.length; k++){
+                    okbutton = ok[k];
+                    okbutton.addEventListener('click', function (okevent) {
+                        if(okevent.target.onclick){
+                            wholeForm.innerHTML="";
+                        }
+                    })
+                }
+
+            })
+        }
+
+    });
+
+//        $(document).ready(function(){
+
+    $('.add-address').click(function (e) {
+//            e.preventDefault()
+
+        $(document).submit(function(ee){
+            ee.preventDefault();
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+            var address = document.getElementById('address').value;
+            var province = document.getElementById('province').value;
+            var city = document.getElementById('city').value;
+            var zipcode = document.getElementById('zipcode').value;
+            var phone = document.getElementById('phone').value;
+
+            $.ajax({
+                method: "POST",
+                url:(`${window.location.protocol}//${window.location.host}`+'/cart/extended-address/'),
+                data:{
+                    'address': address,
+                    'province': province,
+                    'city': city,
+                    'zipcode': zipcode,
+                    'phone': phone,
+                    csrfmiddlewaretoken: token
+                },
+                cache: false,
+                dataType: 'json',
+
+                success: function (res) {
+                    alertify.set('notifier','position', 'top-left');
+                    alertify.success(res.status);
+                }
+
+            });
+            $.ajax.clear();
+
+        });
+        var formValidity = $('#form')[0].checkValidity();
+        if (formValidity){
+            closeForm();
+//            window.location = window.location;
+            var newtab = window.location.href='/cart/checkout/';
+            newtab.location.reload(true);
+            newtab.refresh(true);
+        }
+    });
+
+    function clearForms()
+    {
+      var i;
+      for (i = 0; (i < document.forms.length); i++) {
+        document.forms[i].reset();
+      }
+    }
+
+</script>

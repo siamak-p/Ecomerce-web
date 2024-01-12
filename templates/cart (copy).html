@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block headimporting %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{% endblock headimporting %}
+
+{% block javascriptimporting %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+{% endblock javascriptimporting %}
+
+
+
+
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="box-element">
+            <a href="" class="btn btn-outline-dark align-btn">
+            ادامه خرید
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <table class="table">
+                <tr>
+                    <th>
+                        اقلام: 2
+                    </th>
+                    <th>
+                        قیمت کل: 20 هزار
+                    </th>
+                    <th>
+                        <a href="" class="btn btn-success">تسویه حساب</a>
+                    </th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="box-element">
+            <table class="table detail-table">
+            <thead>
+            <tr>
+                <td><strong> تصویر </strong></td>
+                <td><strong> آیتم </strong></td>
+                <td><strong> قیمت </strong></td>
+                <td><strong> تعداد </strong></td>
+                <td><strong> قیمت کل هر آیتم </strong></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </td>
+                <td>5</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+<style>
+     * {
+         box-sizing: border-box !important;
+         overflow-x: hidden;
+    }
+
+    footer{
+        text-align: right;
+    }
+
+    .align-btn{
+        margin-left: 10px;
+    }
+
+    @media only screen and (max-width: 600px){
+
+        .box-element{
+            margin: 20px 10px 20px 0;
+        }
+    }
+
+</style>
+{% endblock content %}

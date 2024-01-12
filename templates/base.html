@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+{% load static %}
+{% load base_tags %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="#">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/flexboxgrid.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/home.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/animate.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/owl.carousel.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/owl.theme.default.min.css' %}">
+	<!--for alertify-->
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/alertify.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/alertify.rtl.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/semantic.rtl.min.css' %}">
+
+	<!--<link rel="stylesheet" href="https://www.calculium.com/js/alertify/css/um.min.css" />-->
+	<!--<script defer src="https://alertifyjs.com/build/alertify.js"></script>-->
+	    <!--RTL version-->
+	<!--<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css"/>-->
+	<!--&lt;!&ndash; Default theme &ndash;&gt;-->
+	<!--<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.rtl.min.css"/>-->
+	<!--&lt;!&ndash; Semantic UI theme &ndash;&gt;-->
+	<!--<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.rtl.min.css"/>-->
+	<!--&lt;!&ndash; Bootstrap theme &ndash;&gt;-->
+	<!--<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>-->
+	<!--&lt;!&ndash;end alertify&ndash;&gt;-->
+
+
+    <script src="https://kit.fontawesome.com/9607649dd6.js" crossorigin="anonymous"></script>
+	<script type="text/javascript" async src="{% static 'web/js/cart.js' %}"></script>
+
+	<!--<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js"></script>-->
+	{% block headimporting %}
+	{% endblock headimporting %}
+
+	
+	<title>قصابی کوه گوشت</title>
+
+
+	<style>
+
+		/*@media only screen and (max-width: 600px) {*/
+			/*.alertify-notifier.ajs-right{*/
+				/*right: -60%;*/
+			/*}*/
+
+		/*}*/
+
+		/*@media only screen and (max-width: 400px) {*/
+			/*.alertify-notifier.ajs-right{*/
+				/*right: -70%;*/
+			/*}*/
+
+		/*}*/
+		
+	</style>
+</head>
+<!--<script type="text/javascript">-->
+	<!--var user = '{{request.user}}'-->
+
+	<!--function getCookie(name) {-->
+        <!--let cookieValue = null;-->
+        <!--if (document.cookie && document.cookie !== '') {-->
+            <!--const cookies = document.cookie.split(';');-->
+            <!--for (let i = 0; i < cookies.length; i++) {-->
+                <!--const cookie = cookies[i].trim();-->
+                <!--// Does this cookie string begin with the name we want?-->
+                <!--if (cookie.substring(0, name.length + 1) === (name + '=')) {-->
+                    <!--cookieValue = decodeURIComponent(cookie.substring(name.length + 1));-->
+                    <!--break;-->
+                <!--}-->
+            <!--}-->
+        <!--}-->
+        <!--return cookieValue;-->
+	<!--}-->
+	<!--const csrftoken = getCookie('csrftoken');-->
+<!--</script>-->
+<body>
+	<header>
+		<nav>
+			<div class="nav-right">
+				<a href="{% url 'meat:home' %}"> <i class="fas fa-home"></i> </a>
+				<a href="{% url 'cart:cart' %}">
+					<i class="fas fa-shopping-cart"></i>
+					<p id="cart-total" class="cart-list">{{ lenitems }}</p>
+
+				</a>
+				<a href=""> <i class="fas fa-search"></i> </a>
+				{% if user.is_authenticated %}
+				    <a href="">
+						<i class="far fa-user"></i>
+						{{user.get_full_name}}
+					</a>
+				<a href="{% url 'report:tracing-order' %}">پیگیری سفارشات</a>
+				{% else %}
+				    <a href=""> <i class="far fa-user"></i> </a>
+				{% endif %}
+			</div>
+			<div class="nav-left">
+				{% if user.is_authenticated %}
+					{% if user.is_superuser %}
+						<a href="{% url 'report:reporting' %}"  style="margin-left: 30px">گزارش گیری</a>
+					{% endif %}
+				    <a href="{% url 'account:logout' %}"><i class="fas fa-power-off"></i></a>
+				{% else %}
+					<div class="register-login-btn">
+						<i class="fas fa-user"></i>
+						<a href="{% url 'account:login' %}">ثبت نام / ورود</a>
+					</div>
+				{% endif %}
+			</div>
+		</nav>
+
+		<section class="slider">
+			<div class="slides">
+				<div class="item active" id="slide1">
+					<img src="{% static 'web/img/meat_s1.jpg' %}">
+					<span style="text-shadow: 1px 1px 10px white, 0 0 20px white, 0 0 5px white">پخش فرآورده های گوشتی, گوسفندی و گوساله</span>
+				</div>
+
+				<div class="item" id="slide2">
+					<img src="{% static 'web/img/meat_s3.jpg' %}">
+					<span style="text-shadow: 1px 1px 10px white, 0 0 20px white, 0 0 5px white">پخش گوشت و مرغ علم باز</span>
+				</div>
+
+				<div class="item" id="slide3">
+					<img src="{% static 'web/img/meat_s5.jpg' %}">
+					<span style="text-shadow: 1px 1px 10px white, 0 0 20px white, 0 0 5px white">عرضه مستقیم گوشت و مرغ تازه و منجمد برزیلی (وارداتی)</span>
+				</div>
+			</div>
+
+			<div class="buttons">
+				<i onclick="setSlide('slide1', 1)" class="fas fa-circle"></i>
+				<i onclick="setSlide('slide2', 2)" class="fas fa-circle"></i>
+				<i onclick="setSlide('slide3', 3)" class="fas fa-circle"></i>
+			</div>	
+		</section>
+	</header>
+
+	<main>
+
+		{% block content %}{% endblock content %}
+
+	</main>
+
+	<footer>
+		<div class="row">
+			<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+				<div class="right">
+					<div class="title"> باما در تماس باشید </div>
+					<div class="title"> بامدیریت محسن علم باز </div>
+					<div class="des"> آدرس: خیابان احسان, بین 13 و 14 غربی, امیرشرقی, پلاک 2
+					</div>
+					<div class="des">موبایل: 09122841928 &nbsp 09127920683 &nbsp 09301156919 &nbsp 09103637937
+					</div>
+
+
+					<div class="des">تلفن: 02177329352
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+				<div class="left">
+					<div class="title"> مارا در شبکه های اجتماعی دنبال کنید </div>
+					<div class="socials">
+						<a href=""><i class="fab fa-instagram"></i></a>
+						<a href="https://api.whatsapp.com/send?phone=09383232169"><i class="fa fa-whatsapp"></i></a>
+						<a href="https://t.me/09383232169"><i class="fab fa-telegram-plane"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bottom"> تمامی فعالیت های این سایت تابع قوانین و مقررات جمهوری اسلامی ایران است  </div>
+	</footer>
+
+	<script type="text/javascript" src="{% static 'web/js/main.js' %}"></script>
+	
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript" src="{% static 'web/js/jquery.js' %}"></script>
+	<script type="text/javascript" src="{% static 'web/js/owl.carousel.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'web/js/alertify.min.js' %}"></script>
+
+{% block importscript %}{% endblock importscript %}
+</body>
+</html>

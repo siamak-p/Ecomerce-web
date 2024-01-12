@@ -1,0 +1,132 @@
+<style>
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    /* Style the buttons inside the tab */
+    .tab .tablinks {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    /* Change background color of buttons on hover */
+    .tab .tablinks:hover {
+        background-color: #ddd;
+    }
+
+    /* Create an active/current tablink class */
+    .tab .tablinks.active {
+        background-color: #ccc;
+    }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    .radio-btn{
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        justify-items: center;
+        align-items: center;
+        /*flex-direction: ;*/
+    }
+    .radio-btn .form-check-input{
+        position: absolute;
+        right: 45px;
+    }
+
+</style>
+<body>
+
+    <div class="tab">
+        <a class="tablinks active" id="title-shanbeh" onclick="openDay(event, 'firstday')">{{today}}</a>
+    </div>
+
+    <div id="firstday" class="tabcontent">
+        <div class="radio-btn">
+            <div class="form-check">
+                {% if not delivery_time.time1 or timecheck > 8 %}
+                    <input class="form-check-input input" type="radio" name="flexRadiotime" id="flexRadiotime1" style="top:-15px" disabled/>
+                    <label class="form-check-label" for="flexRadiotime1"> ساعت ۹ تا ۱۲ </label>
+                {% else %}
+                    <input class="form-check-input timing input" type="radio" name="flexRadiotime" id="time1" style="top:-15px"/>
+                    <label class="form-check-label" for="time1"> ساعت ۹ تا ۱۲ </label>
+                {% endif %}
+            </div>
+
+            <div class="form-check">
+                {% if not delivery_time.time2 or timecheck > 11 %}
+                    <input class="form-check-input input" type="radio" name="flexRadiotime" id="flexRadiotime2" style="top:-15px" disabled/>
+                    <label class="form-check-label" for="flexRadiotime2"> ساعت ۱۲ تا ۱۵ </label>
+                {% else %}
+                    <input class="form-check-input timing input" type="radio" name="flexRadiotime" id="time2" style="top:-15px"/>
+                    <label class="form-check-label" for="time2"> ساعت ۱۲ تا ۱۵ </label>
+                {% endif %}
+            </div>
+
+            <div class="form-check">
+                {% if not delivery_time.time3 or timecheck > 14 %}
+                    <input class="form-check-input input" type="radio" name="flexRadiotime" id="flexRadiotime3" style="top:-15px" disabled/>
+                    <label class="form-check-label" for="flexRadiotime3"> ساعت ۱۵ تا ۱۸ </label>
+                {% else %}
+                    <input class="form-check-input timing input" type="radio" name="flexRadiotime" id="time3" style="top:-15px"/>
+                    <label class="form-check-label" for="time3"> ساعت ۱۵ تا ۱۸ </label>
+                {% endif %}
+            </div>
+
+            <div class="form-check">
+                {% if not delivery_time.time4 or timecheck > 17 %}
+                    <input class="form-check-input input" type="radio" name="flexRadiotime" id="flexRadiotime4" style="top:-15px" disabled/>
+                    <label class="form-check-label" for="flexRadiotime4"> ساعت ۱۸ تا ۲۱ </label>
+                {% else %}
+                    <input class="form-check-input timing input" type="radio" name="flexRadiotime" id="time4" style="top:-15px"/>
+                    <label class="form-check-label" for="time4"> ساعت ۱۸ تا ۲۱ </label>
+                {% endif %}
+            </div>
+            {% if not delivery_time.time1 and not delivery_time.time2 and not delivery_time.time3 and not delivery_time.time4 or timecheck > 17 %}
+                <p style="background-color: red; color: white">مشتری گرامی با عرض پوزش به دلیل تعداد زیاد بسته های ارسالی، امکان سفارش برای امروز ممکن نمی باشد. لطفا روز دیگر مجددا تلاش فرمایید.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('firstday').style.display = "block";
+        function openDay(evt, dayName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(dayName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+{#        var now = new Date();#}
+{#        var hours = now.getHours();#}
+{#        console.log('hour: ', hours);#}
+{#        console.log('{{ timecheck }}');#}
+
+    </script>
+</body>

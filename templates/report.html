@@ -1,0 +1,514 @@
+{% extends 'base.html' %}
+
+{% block headimporting %}
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock headimporting %}
+
+{% block content %}
+    <style>
+        body{
+            text-align: right;
+        }
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        .tab .tablinks {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+        .radio-btn{
+            /*position: relative;*/
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            justify-items: center;
+            align-items: center;
+            margin-top: 25px;
+            /*flex-direction: ;*/
+        }
+        .radio-btn .form-check-input{
+            /*position: relative;*/
+            right: 45px;
+        }
+
+         .input {
+             width: 100%;
+             border-radius: 5px;
+             background: none;
+             margin-top: 20px;
+             padding: 10px;
+             outline: none;
+         }
+
+    </style>
+    <body>
+        <div class="tab">
+            <button class="tablinks" onclick="openReport(event, 'daily-report')">گزارش روزانه</button>
+            <button class="tablinks" onclick="openReport(event, 'weekly-report')">گزارش هفتگی</button>
+            <button class="tablinks" onclick="openReport(event, 'monthly-report')">گزارش ماهانه</button>
+            <button class="tablinks" onclick="openReport(event, 'orders')">سفارشات</button>
+        </div>
+
+        <div id="daily-report" class="tabcontent">
+
+            <div class="container px-3 my-5 clearfix">
+                <div class="card">
+                    <div class="card-header text-right">
+                        <h2>گزارش روزانه</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <div style="margin: auto">
+                                    <table id="daily-table" class="table table-bordered m-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle py-3 px-4" >شماره</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">سفارش دهنده</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">محصول</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 30px;">کیلو</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 220px;">آدرس</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">تلفن</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">روز ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">بازه زمانی ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 80px;">روش پرداخت</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 80px;">شماره پیگیری</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 60px;">توضیحات</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr id="dtr">
+                                                <td id="c11" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c12" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c13" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c14" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c15" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c16" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c17" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c18" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c19" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c20" class="text-center font-weight-semibold align-middle p-4"></td>
+
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+                            <form id="daily-report-form" method="POST">{% csrf_token %}
+                                <input type="submit" id="daily-report-btn" class="btn btn-success" style="margin-top: 10px" value="جستجو">
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="weekly-report" class="tabcontent">
+
+            <div class="container px-3 my-5 clearfix">
+                <div class="card">
+                    <div class="card-header text-right">
+                        <h2>گزارش هفتگی</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <div style="margin: auto">
+                                    <table id="weekly-table" class="table table-bordered m-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">سفارش دهنده</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">محصول</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 30px;">تعداد</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 220px;">آدرس</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">تلفن</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">روز ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">بازه زمانی ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 80px;">روش پرداخت</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 60px;">ارسال شده</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td id="c21" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c22" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c23" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c24" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c25" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c26" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c27" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c28" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c29" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+                            <form id="weekly-report-form" method="POST">{% csrf_token %}
+                                <input type="submit" id="weekly-report-btn" class="btn btn-success" style="margin-top: 10px" value="جستجو">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="monthly-report" class="tabcontent">
+
+            <div class="container px-3 my-5 clearfix">
+                <div class="card">
+                    <div class="card-header text-right">
+                        <h2>گزارش ماهانه</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <div style="margin: auto">
+                                    <table id="monthly-table" class="table table-bordered m-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">سفارش دهنده</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">محصول</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 30px;">تعداد</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 220px;">آدرس</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">تلفن</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">روز ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">بازه زمانی ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 80px;">روش پرداخت</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 60px;">ارسال شده</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td id="c31" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c32" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c33" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c34" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c35" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c36" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c37" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c38" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c39" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+                            <form id="monthly-report-form" method="POST">{% csrf_token %}
+                                <input type="submit" id="monthly-report-btn" class="btn btn-success" style="margin-top: 10px" value="جستجو">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="orders" class="tabcontent">
+
+            <div class="container px-3 my-5 clearfix">
+                <div class="card">
+                    <div class="card-header text-right">
+                        <h2>سفارشات</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered m-0">
+                                <div style="margin: auto">
+                                    <table class="table table-bordered m-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">سفارش دهنده</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">محصول</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 30px;">تعداد</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 220px;">آدرس</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">تلفن</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 100px;">روز ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 120px;">بازه زمانی ارسال</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 80px;">روش پرداخت</th>
+                                                <th class="text-center align-middle py-3 px-4" style="width: 60px;">ارسال شده</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr>
+                                                <td id="c41" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c42" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c43" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c44" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c45" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c46" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c47" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c48" class="text-center font-weight-semibold align-middle p-4"></td>
+                                                <td id="c49" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+
+                            <div class="radio-btn">
+                                <div class="form-check">
+                                    <input class="form-check-input timing-search input" type="radio" name="flexRadiotime-search" id="time1-search" style="top:-15px" autocomplete="off"/>
+                                    <label class="form-check-label" for="time1-search"> ساعت ۹ تا ۱۲ </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input timing-search input" type="radio" name="flexRadiotime-search" id="time2-search" style="top:-15px" autocomplete="off"/>
+                                    <label class="form-check-label" for="time2-search"> ساعت ۱۲ تا ۱۵ </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input timing-search input" type="radio" name="flexRadiotime-search" id="time3-search" style="top:-15px" autocomplete="off"/>
+                                    <label class="form-check-label" for="time3-search"> ساعت ۱۵ تا ۱۸ </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input timing-search input" type="radio" name="flexRadiotime-search" id="time4-search" style="top:-15px" autocomplete="off"/>
+                                    <label class="form-check-label" for="time4-search"> ساعت ۱۸ تا ۲۱ </label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input timing-search input" type="radio" name="flexRadiotime-search" id="time5-search" style="top:-15px" autocomplete="off"/>
+                                    <label class="form-check-label" for="time5-search">همه زمانها</label>
+                                </div>
+                            </div>
+                            <form id="order-form" method="POST">{% csrf_token %}
+                                <input type="submit" id="orders-btn" class="btn btn-success" style="margin-top: 10px" value="جستجو">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+{% endblock content %}
+
+{% block importscript %}
+
+    <script>
+        function openReport(evt, cityName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+
+        $(document).ready(function (ee) {
+            var token = $('input[name=csrfmiddlewaretoken]').val();
+            var dailyclicked, weeklyclicked, monthlyclicked;
+
+{#            daily clicked #}
+{#            document.getElementById('daily-report-btn').addEventListener("click", function (e) {#}
+            $("#daily-report-btn").click(function (e) {
+                e.preventDefault();
+                dailyclicked = 'daily';
+{#                weeklyclicked = 'weekly'; #}
+{#                monthlyclicked = 'monthly';#}
+                var daytable = document.getElementById('daily-table');
+                if (daytable.rows.length >1 && daytable.rows[1].textContent.trim() ===''){
+                    daytable.deleteRow(1);
+                }
+                while(daytable.rows.length >1){
+                    daytable.deleteRow(1)
+                }
+                $.ajax({
+                    method: "POST",
+                    url: (`${window.location.protocol}//${window.location.host}` + '/report/reporting/'),
+                    data: {
+                        'clickedbtn': dailyclicked,
+                        csrfmiddlewaretoken: token
+                    },
+//                    cache: false,
+                    dataType: 'json'//,
+
+                }).done(function (data) {
+                    var cell = [];
+                    if (data.success == true) {
+                        dta = JSON.parse(data.data);
+
+                        if (dta == ''){
+                            alert('هنوز سفارشی ثبت نشده است');
+                        }else{
+                            for (var i=0; i < dta.length; i++) {
+                                var a = 'user' + i;
+                                var newRow = daytable.insertRow(i+1);
+                                for (var jj=0; jj<11; jj++){
+                                    cell[jj] = newRow.insertCell(jj);
+                                }
+                                cell[0].innerHTML = i+1;
+                                cell[1].innerHTML = data.extra[a];
+                                cell[2].innerHTML = dta[i].fields.item;
+                                cell[3].innerHTML = dta[i].fields.quantity;
+                                cell[4].innerHTML = dta[i].fields.address;
+                                cell[5].innerHTML = data.phone[data.extra[a]];
+                                cell[6].innerHTML = dta[i].fields.addedtime;
+                                cell[7].innerHTML = dta[i].fields.delivery_time_bound;
+                                cell[9].innerHTML = dta[i].fields.transaction_id;
+                                if (i > 1 && (dta[i].fields.transaction_id === dta[i-1].fields.transaction_id)){
+                                    cell[10].innerHTML = 'همراه با ' + '<<' +  dta[i-1].fields.item + '>>' + '  ارسال گردد.';
+                                }
+                            }
+                            }
+                    }
+{#                    console.log('table row len', daytable.rows.length);#}
+
+{#                                            else if (data.success == false){#}
+{#                                                p.innerHTML = data.data#}
+{#                                            }#}
+                });
+{#                }#}
+            });
+
+{#            weekly clicked#}
+            document.getElementById('weekly-report-btn').addEventListener("click", function (e) {
+                e.preventDefault();
+{#                dailyclicked = 'daily';#}
+                weeklyclicked = 'weekly';
+{#                monthlyclicked = 'monthly';#}
+                $.ajax({
+                    method: "POST",
+                    url:(`${window.location.protocol}//${window.location.host}`+'/report/reporting/'),
+                    data:{
+                        'clickedbtn': weeklyclicked,
+                        csrfmiddlewaretoken: token
+                    },
+//                    cache: false,
+                    dataType: 'json'//,
+
+                })
+            });
+
+{#            monthly clicked#}
+            document.getElementById('monthly-report-btn').addEventListener("click", function (e) {
+                e.preventDefault();
+{#                dailyclicked = 'daily';#}
+{#                weeklyclicked = 'weekly';#}
+                monthlyclicked = 'monthly';
+                $.ajax({
+                    method: "POST",
+                    url:(`${window.location.protocol}//${window.location.host}`+'/report/reporting/'),
+                    data:{
+                        'clickedbtn': monthlyclicked,
+                        csrfmiddlewaretoken: token
+                    },
+//                    cache: false,
+                    dataType: 'json'//,
+
+                })
+            });
+
+            var timing = document.getElementsByClassName('timing-search');
+            var timingSearch;
+            for (var l=0; l < timing.length; l++){
+                var timingbtn = timing[l];
+                timingbtn.addEventListener('click', function () {
+                    var radio = $('input[name=flexRadiotime-search]:checked');
+//                    console.log('timing ', radio.attr('id'));
+                    timingSearch = radio.attr('id')
+                })
+            }
+
+            $("#orders-btn").click(function (e) {
+                e.preventDefault();
+                console.log('timingSearch: ', timingSearch);
+
+                if (timingSearch){
+                    $.ajax({
+                    method: "POST",
+                    url:(`${window.location.protocol}//${window.location.host}`+'/report/ordering/'),
+                    data:{
+                        'timing-search': timingSearch,
+                        csrfmiddlewaretoken: token
+                    },
+//                    cache: false,
+                    dataType: 'json'//,
+
+                }).done(function (data) {
+                    if (data.success){
+//                        window.location.href = data.url;
+                    }
+                });
+                }
+                else {
+                    alertify.set('notifier','position', 'top-left');
+                    alertify.success('لطفا زمان مورد نظر را انتخاب نمایید.');
+                }
+//                $.ajax.clear()
+            });
+
+            window.onload = function(){
+            clearItForm.reset();
+}
+
+        })
+
+
+    </script>
+
+{% endblock importscript %}

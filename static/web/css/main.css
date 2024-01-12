@@ -1,0 +1,19 @@
+@font-face{
+	font-family:  Sahel;
+	src:  url(../fonts/Sahel.ttf);
+}
+
+*{
+	direction: rtl;
+	font-family: Sahel;
+	box-sizing: border-box;
+}
+
+body{
+	font-size: 16px;
+	margin: 0px;
+}
+
+a{
+	text-decoration: none;
+}

@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% block headimporting %}
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock headimporting %}
+
+{% block content %}
+
+<style type="text/css">
+    body{
+        margin-top:20px;
+        background:#eee;
+    }
+
+    .card{
+        box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
+    }
+
+   * {
+         box-sizing: border-box !important;
+    }
+
+    footer{
+        text-align: right;
+    }
+
+        .value-button {
+            display: inline-block;
+            border: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 20px;
+            text-align: center;
+            vertical-align: middle;
+            padding: 11px 0;
+            background: #eee;
+             -webkit-touch-callout: none;
+             -webkit-user-select: none;
+             -khtml-user-select: none;
+             -moz-user-select: none;
+             -ms-user-select: none;
+            user-select: none;
+        }
+
+        .value-button:hover {
+            cursor: pointer;
+        }
+
+        input.num{
+            text-align: center;
+            border: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 0px;
+            width: 40px;
+            height: 40px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+             -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .value-button{
+            padding: 20px;
+        }
+
+</style>
+
+<div class="container px-3 my-5 clearfix">
+    <!-- Shopping cart table -->
+    <div class="card">
+        <div class="card-header">
+            <h2 style="text-align: right">سبد خرید</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered m-0">
+                    <thead>
+                        <tr>
+                        <!-- Set columns width -->
+                            <th class="text-center align-middle py-3 px-4" style="min-width: 400px;">مشخصات محصول</th>
+                            <th class="text-center align-middle py-3 px-4" style="width: 100px;">قیمت</th>
+                            <th class="text-center align-middle py-3 px-4" style="width: 120px;">تعداد به کیلو</th>
+                            <th class="text-center align-middle py-3 px-4" style="width: 100px;">قیمت کل هر محصول</th>
+                            <th class="text-center align-middle py-3 px-0" style="width: 40px;"><a href="#" class="shop-tooltip float-none text-light" title="" data-original-title="Clear cart"><i class="ino ion-md-trash"></i></a>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {% if not items %}
+                        <td class="text-center p-4"><strong>سبد خالیست</strong></td>
+                        <td class="text-right font-weight-semibold align-middle p-4"></td>
+                        <td class="text-center align-middle p-4"></td>
+                        <td class="text-right font-weight-semibold align-middle p-4"></td>
+                        <td class="text-center align-middle"></td>
+                    {% else %}
+                        {% for item in items %}
+                            <tr>
+                                <td class="p-4">
+                                    <div class="media align-items-center">
+                                        <div class="d-block text-dark">{{item.product.name}}</div>
+                                        <small>
+                                            <span class="text-muted">آدرس جهت ارسال: {{item.ordershipping}} </span>
+                                        </small>
+                                        <img src="{{item.product.image.url}}" style="width: 250px; height: 150px" class="d-block ui-bordered mr-4" alt="">
+                                    </div>
+                                </td>
+                                <td class="text-right font-weight-semibold align-middle p-4">{{item.product.price}}</td>
+                                <td class="text-center align-middle p-4" id="no-4">
+                                    <div style="margin: 10px 70px">
+                                        <strong>{{item.quantity}}</strong>
+                                    </div>
+                                    <div class="item">
+                                        <div class="quantity">
+                                            <button class="plus-btn value-button increase"  type="button" name="button">+</button>
+                                            <input type="number" id="number-{{item.product.id}}" class="num" value="0" disabled>
+                                            <button class="minus-btn value-button decrease"  type="button" name="button">-</button>
+
+
+                                            <div class="extend-btn product_data" style="margin-top: 20px">
+                                                {% csrf_token %}
+                                                <button class="btn btn-success cart-update" value="{{item.product.id}}">به روز رسانی</button>
+                                            </div>
+                                        </div>
+                                    </div><br>
+
+                                </td>
+                                <td class="text-right font-weight-semibold align-middle p-4">{{item.total_price_per_item}}</td>
+                                <td class="text-center align-middle px-0"><a href="{% url 'cart:delete-item' item.pk %}" class="shop-tooltip close float-none text-danger" title="" data-original-title="Remove">×</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+</tbody>
+                </table>
+            </div>
+            <!-- / Shopping cart table -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center pb-4">
+                <div class="mt-4">
+                    <label class="text-muted font-weight-normal">وزن محصولات انتخاب شده به کیلوگرم: </label>
+                    <div class="text-large text-right"><strong>{{order.total_ordered}}</strong></div>
+                </div>
+                <div class="d-flex">
+                    <div class="text-right mt-4">
+                        <label class="text-muted font-weight-normal m-0">قیمت کل: </label>
+                        <div class="text-large"><strong>{{order.total_price}}</strong></div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="float-right">
+                <a href="{% url 'meat:home' %}" class="btn btn-outline-dark">برگشت به فروشگاه</a>
+                {% if items %}
+                    <a href="{% url 'cart:checkout' %}" class="btn btn-success">تائید</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block importscript %}
+<script>
+
+    $('.minus-btn').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var value = parseInt($input.val());
+
+            value = value - 1;
+
+        $input.val(value);
+
+    });
+
+    $('.plus-btn').on('click', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var value = parseInt($input.val());
+
+            value = value + 1;
+
+        $input.val(value);
+    });
+
+
+    $(document).ready(function () {
+        var btnUpdate = document.getElementsByClassName('cart-update');
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        for (var i = 0; i < btnUpdate.length; i++){
+            var button = btnUpdate[i];
+            button.addEventListener('click', function (event) {
+                var buttonClicked = event.target.value;
+                console.log(buttonClicked);
+                var qntFromSite = document.getElementById('number-'+ event.target.value);
+{#                document.getElementById('cart-total').textContent = qntFromSite;#}
+                // console.log('value is: ', qntFromSite.value);
+                $.ajax({
+                    method: "POST",
+                    url:(`${window.location.protocol}//${window.location.host}`+'/cart/cart-update/'),
+                    data:{
+                        'productID': buttonClicked,
+                        'qntFromSite': qntFromSite.value,
+                        csrfmiddlewaretoken: token
+                    },
+                    cache: false,
+                    dataType: 'json',
+
+                    success: function (res) {
+                        alertify.set('notifier','position', 'top-left');
+                        alertify.success(res.status);
+                        location.reload(true);
+{#                        document.getElementById('cart-total').textContent = qntFromSite.toString();#}
+
+                    },
+                    error: function(){
+                        alertify.error('خطایی رخ داده است. لطفا مجددا امتحان فرمایید.');
+                    }
+
+                });
+
+            });
+        }
+
+    });
+
+</script>
+{% endblock importscript %}

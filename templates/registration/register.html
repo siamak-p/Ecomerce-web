@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/flexboxgrid.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/login.css' %}">
+    <script src="https://kit.fontawesome.com/9607649dd6.js" crossorigin="anonymous"></script>
+
+
+	<title>ثبت نام</title>
+</head>
+<body>
+
+	<main>
+		<div class="login-container">
+			<div class="row">
+				<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+					<div class="login-box">
+						<form method="post">{% csrf_token %}
+							<div class="input-group">
+								<label>نام کاربری</label>
+								{{form.username}}
+								{% if form.username.errors %}
+                                    {% for error in form.username.errors %}
+                                        <span style="font-size: 1.3em; color: red;">{{error}}</span>
+                                    {% endfor %}
+                                {% endif %}
+							</div>
+                            <div class="input-group">
+								<label>ایمیل</label>
+								{{form.email}}
+                                {% if form.email.errors %}
+                                    {% for error in form.email.errors %}
+                                        <span style="font-size: 1.3em; color: red;">{{error}}</span>
+                                    {% endfor %}
+                                {% endif %}
+							</div>
+                            <div class="input-group">
+								<label>رمز عبور</label>
+								{{form.password1}}
+                                {% if form.password1.errors %}
+                                    {% for error in form.password1.errors %}
+                                        <span style="font-size: 1.3em; color: red;">{{error}}</span>
+                                    {% endfor %}
+                                {% endif %}
+							</div>
+							<div class="input-group">
+								<label>تکرار رمز عبور</label>
+								{{form.password2}}
+                                {% if form.password2.errors %}
+                                    {% for error in form.password2.errors %}
+                                        <span style="font-size: 1.3em; color: red;">{{error}}</span>
+                                    {% endfor %}
+                                {% endif %}
+							</div>
+							<p class="do-you-have"> اگر حساب کاربری دارید برای
+								<a href="{% url 'account:login' %}">ورود</a> کلیک کنید.
+							</p>
+							<div class="submit-btn-container">
+								<input type="submit" value="ثبت نام">
+							</div>
+						</form>
+						<div class="social-auth">
+							<a href=""> <i class="fab fa-facebook"></i> </a>
+							<a href=""> <i class="fab fa-google-plus-g"></i> </a>
+							<a href=""> <i class="fab fa-instagram"></i> </a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+					<div class="login-img-container">
+						<img src="{% static 'web/img/login.svg' %}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+</body>
+</html>

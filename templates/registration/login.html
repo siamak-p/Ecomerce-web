@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/flexboxgrid.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'web/css/login.css' %}">
+    <script src="https://kit.fontawesome.com/9607649dd6.js" crossorigin="anonymous"></script>
+
+	<title>ورود</title>
+
+
+    <style>
+        img.captcha{
+            width: 50%;
+        }
+
+
+
+        @media only screen and (max-width: 400px){
+            img.captcha{
+                width: 80%;
+            }
+        }
+
+        @media only screen and (min-width: 401px) and (max-width: 450px) {
+            img.captcha{
+                width: 70%;
+            }
+        }
+
+        @media only screen and (min-width: 451px) and (max-width: 492px) {
+            img.captcha{
+                width: 70%;
+            }
+        }
+
+        @media only screen and (min-width: 493px) and (max-width: 516px) {
+            img.captcha{
+                width: 60%;
+            }
+        }
+
+        @media only screen and (min-width: 517px) and (max-width: 767px) {
+            img.captcha{
+                width: 30%;
+            }
+        }
+        @media only screen and (min-width: 768px) and (max-width: 991px) {
+            img.captcha{
+                width: 30%;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+	<main>
+		<div class="login-container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="make-center">
+                        <div class="login-box">
+						<form method="post">{% csrf_token %}
+                            <div class="input-group">
+                                {{form.as_p}}
+							</div>
+							<p class="do-you-have"> اگر حساب کاربری ندارید برای
+								<a href="{% url 'account:register' %}">ایجاد</a> کلیک کنید.
+							</p>
+							<div class="submit-btn-container">
+								<input type="submit" value="ورود">
+							</div>
+						</form>
+						<div class="social-auth">
+							<a href=""> <i class="fab fa-facebook"></i> </a>
+							<a href=""> <i class="fab fa-google-plus-g"></i> </a>
+							<a href=""> <i class="fab fa-instagram"></i> </a>
+						</div>
+					</div>
+                    </div>
+				</div>
+{#				<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">#}
+{#					<div class="login-img-container">#}
+{#						<img src="{% static 'web/img/login.svg' %}">#}
+{#					</div>#}
+{#				</div>#}
+			</div>
+		</div>
+	</main>
+</body>
+</html>
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous">
+</script>
+<script>
+
+    $(document).ready(function () {
+
+        var cap = document.getElementById('id_captcha_1');
+        cap.setAttribute('oninvalid', "this.setCustomValidity('این فیلد نمی تواند خالی باشد.')");
+        cap.setAttribute('onchange', "try{setCustomValidity('')}catch(e){}");
+
+        // Add refresh button after field (this can be done in the template as well)
+        $('img.captcha').after(
+            $('<a href="#void" class="captcha-refresh" style="font-size: 1.5em; color: red; margin-right: 10px;"><i class="fa fa-refresh"></i></a>')
+        );
+
+        // Click-handler for the refresh-link
+        $('.captcha-refresh').click(function () {
+            var $form = $(this).parents('form');
+            var url = location.protocol + "//" + window.location.hostname + ":"
+                + location.port + "/captcharefresh/";
+            // Make the AJAX-call
+            $.getJSON(url, {}, function (json) {
+                $form.find('input[name="captcha_0"]').val(json.key);
+                $form.find('img.captcha').attr('src', json.image_url);
+            });
+
+            return false;
+        });
+    });
+
+</script>
+

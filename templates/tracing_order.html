@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% block headimporting %}
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock headimporting %}
+{% block content %}
+
+
+
+<style type="text/css">
+
+    * {
+        box-sizing: border-box !important;
+    }
+
+    .input{
+        width: 100%;
+        border-radius: 5px;
+        background: none;
+        margin-top: 20px;
+        padding: 10px;
+        outline: none;
+    }
+
+    .summary{
+        display: flex;
+        justify-content: space-between;
+    }
+    .spn{
+        display: block;
+        margin: 15px 0;
+        text-align: right;
+    }
+
+    .row .right .box-element .alignment {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .row .right .box-element .alignment input{
+        width: 100%;
+    }
+
+    .row .right .box-element p{
+        margin-top: 30px;
+        padding-top: 10px;
+        text-align: right;
+         border-top: 1px solid #888888;
+    }
+
+    footer{
+        text-align: right;
+        overflow-x: hidden;
+    }
+
+
+    .form-check-labels{
+        /*position: absolute;*/
+        right: 3%;
+    }
+
+    .form-check-inputs{
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+        width: auto;
+    }
+
+    .form-checks{
+        text-align: right;
+    }
+
+
+    @media only screen and (max-width: 400px){
+        .box-element{
+            width: 220%;
+        }
+    }
+
+    @media only screen and (min-width: 401px) and (max-width: 450px) {
+        .box-element {
+            width: 190%;
+        }
+    }
+
+    @media only screen and (min-width: 451px) and (max-width: 492px) {
+        .box-element {
+            width: 175%;
+        }
+    }
+
+    @media only screen and (min-width: 493px) and (max-width: 516px) {
+        .box-element{
+            width: 160%;
+        }
+    }
+
+    @media only screen and (min-width: 517px) and (max-width: 767px) {
+        .box-element{
+            width: 150%;
+        }
+    }
+    @media only screen and (min-width: 768px) and (max-width: 991px) {
+        .box-element{
+            width: 110%;
+        }
+    }
+
+</style>
+
+    <div class="container px-3 my-5 clearfix">
+        <div class="card">
+            <div class="card-header text-right">
+                <h2>پیگیری سفارش</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered m-0">
+                        <div style="margin: auto">
+                            <div class="box-element form-checks" id="form-wraper">
+                                <p style="font-size: 1.2em;">لطفا شماره پیگیری خود را وارد کنید</p>
+                                <form id="search-form" method="POST">{% csrf_token %}
+                                    <label for="search">شماره پیگیری:</label>
+                                    <input type="text" id="search" name="search-box" class="input" required>
+                                    <input type="submit" id="search-btn" class="btn btn-success" style="margin-top: 10px" value="جستجو">
+                                </form>
+                                <table class="table table-bordered m-0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 100px;">سفارش دهنده</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 100px;">محصول</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 30px;">تعداد</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 220px;">آدرس</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 120px;">تلفن</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 100px;">روز ارسال</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 120px;">بازه زمانی ارسال</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 80px;">روش پرداخت</th>
+                                            <th class="text-center align-middle py-3 px-4" style="width: 60px;">ارسال شده</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td id="c1" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c2" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c3" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c4" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c5" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c6" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c7" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c8" class="text-center font-weight-semibold align-middle p-4"></td>
+                                            <td id="c9" class="text-center font-weight-semibold align-middle p-4"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </table>
+                    <p style="text-align: center; font-size: 1.2em; font-weight: bold; color: white; background-color: red" id="tbl-body"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content%}
+{% block importscript %}
+
+    <script>
+        $(document).ready(function () {
+
+            $("#search-btn").click(function (e) {
+                e.preventDefault();
+                var searchField = document.getElementById('search');
+                var token = $('input[name=csrfmiddlewaretoken]').val();
+                console.log('search: ', searchField.value);
+                var c1 = document.getElementById("c1");
+                var c2 = document.getElementById("c2");
+                var c3 = document.getElementById("c3");
+                var c4 = document.getElementById("c4");
+                var c5 = document.getElementById("c5");
+                var c6 = document.getElementById("c6");
+                var c7 = document.getElementById("c7");
+                var c8 = document.getElementById("c8");
+                var c9 = document.getElementById("c9");
+                var p = document.getElementById("tbl-body");
+//                meghdar fieldhaye zir ra khali mikonad
+                c1.innerHTML = '';
+                c2.innerHTML = '';
+                c3.innerHTML = '';
+                c4.innerHTML = '';
+                c5.innerHTML = '';
+                c6.innerHTML = '';
+                c7.innerHTML = '';
+                c8.innerHTML = '';
+                p.innerHTML = '';
+
+                var formValidity = $('#search-form')[0].checkValidity();
+//                agar form in page valid nabashad(yani box search khali bashad) if ejra mishavad va agar valid bashad else
+                if (!formValidity){
+                    alertify.set('notifier','position', 'top-left');
+                    alertify.success('لطفا کد پیگیری خود را وارد نمایید.')
+                }else {
+                    $.ajax({
+                        method: "POST",
+                        url: (`${window.location.protocol}//${window.location.host}` + '/report/tracing/'),
+                        data: {
+                            'search-field': searchField.value,
+                            csrfmiddlewaretoken: token
+                        },
+                        dataType: 'json'//,
+
+                    }).done(function (data) {
+//                        console.log('done: ', data.success);
+                        if (data.success==true){
+                            dta = JSON.parse(data.data);
+                            console.log('dts dta', dta[0].fields.item);
+                            for(i=0; i<dta.length; i++){
+                                console.log('length: ', dta.length);
+                                c1.innerHTML = data.extra.full_name;
+                                c2.innerHTML += dta[i].fields.item + "<br /><br />";
+                                c3.innerHTML += dta[i].fields.quantity + "<br /><br /><br />";
+                                c4.innerHTML = dta[i].fields.address;
+                                c5.innerHTML = data.extra.phone ;
+                                c6.innerHTML = data.extra.delivery_day;
+                                c7.innerHTML = dta[i].fields.delivery_time_bound;
+                                c8.innerHTML = data.extra.method;
+                                c9.innerHTML = data.extra.is_it_sent;
+                            }
+                        }
+                        else if (data.success == false){
+                            p.innerHTML = data.data
+                        }
+                    });
+//                    $.ajax.clear();
+                }
+            });
+        });
+    </script>
+
+{% endblock importscript %}
